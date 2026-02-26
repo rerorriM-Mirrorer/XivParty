@@ -729,6 +729,7 @@ local buffOrder = L{
     {id=287,en="Atma",ja="アートマ",enl="Atma",jal="アートマ"},
     {id=602,en="Vorseal",ja="神符",enl="Vorseal",jal="神符"},
     {id=603,en="Elvorseal",ja="祈祷神符",enl="Elvorseal",jal="祈祷神符"},
+	{id=506,en="Grace",ja="グレース",enl="Grace",jal="グレース"},
 
     -- 72hr buffs
     {id=481,en="Abdhaljs Seal",ja="アブダルスの焼印",enl="Abdhaljs Seal",jal="アブダルスの焼印"},
