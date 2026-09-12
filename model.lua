@@ -195,11 +195,15 @@ function model:createSetupData()
 
         -- set a zone that is not the current zone for one player, to show off the zone name display
         local zone = windower.ffxi.get_info().zone
+        local iterateDirection = -1
         if zone == 0 then
-            zone = zone + 1
-        else
-            zone = zone - 1
+            iterateDirection = 1
         end
+        -- zone indices are not continuous, iterate until we find a valid zone
+        repeat
+            zone = zone + iterateDirection
+        until res.zones[zone] ~= nil
+
         local outsideZonePlayer = self.parties[partyIndex][math.random(3,5)]
         outsideZonePlayer.zone = zone
         outsideZonePlayer.isOutsideZone = true
