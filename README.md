@@ -136,3 +136,11 @@ Parameters:
 * SirEdeonX (xivbar) - early prototype based on xivbar's code
 * KenshiDRK (partybuffs) - buff packet code and buff icons
 * Windower - buff listing for custom ordering feature
+
+## Current development status — xi-select (2026-10-28)
+
+The opt-in `xi_select` layout adds a subtle selection glow (the existing `assets/xiv/Hover.png`), a 2-pixel name lift while a member is selected, a higher-z cursor, and one-decimal distance formatting for this layout only. Original layouts remain selectable and unchanged. See `TESTING.md` for the pending live test.
+
+## Changelog
+
+- 2026-10-28 (development): Added `xi-select` opt-in selection effects and per-layout range precision; preserved existing mouse-hover and subtarget behavior; no game test yet.

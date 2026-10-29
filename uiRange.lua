@@ -87,7 +87,10 @@ function uiRange:updateNumeric()
 
     if Settings.rangeNumeric and not self.player.isMainPlayer and not self.player.isOutsideZone then
         if self.player.distance then
-            distanceString = string.format("%.2f", self.player.distance)
+            -- Per-layout opt-in; default two decimals remain unchanged.
+            local decimals = tonumber(self.layout.distanceDecimals or self.layout.distancedecimals) or 2
+            decimals = math.max(0, math.min(3, math.floor(decimals)))
+            distanceString = string.format('%.' .. decimals .. 'f', self.player.distance)
         else
             distanceString = '?'
         end

@@ -40,6 +40,7 @@ local uiBuffIcons = require('uiBuffIcons')
 local uiText = require('uiText')
 local uiImage = require('uiImage')
 local const = require('const')
+local utils = require('utils')
 
 -- create the class, derive from uiContainer
 local uiListItem = classes.class(uiContainer)
@@ -54,6 +55,16 @@ function uiListItem:init(layout, player, isUiLocked, itemWidth, itemHeight)
 
         self.hover = self:addChild(uiImage.new(layout.hover))
         self.hover:hide(const.visFeature)
+
+        -- Independent selected-target highlight: existing mouse hover remains unchanged.
+        -- Unknown XML keys are normalized to lowercase by Windower config.
+        local selectedLayout = layout.selectedglow or layout.selectedGlow
+        if selectedLayout and selectedLayout.enabled then
+            self.selectedGlow = self:addChild(uiImage.new(selectedLayout))
+            self.selectedGlow:hide(const.visFeature)
+        end
+        self.baseNamePos = utils:coord(layout.txtName.pos)
+        self.nameLift = tonumber(layout.txtName.selectionLift or layout.txtName.selectionlift) or 0
 
         self.cursor = self:addChild(uiImage.new(layout.cursor))
         self.cursor:opacity(0)
@@ -188,6 +199,14 @@ function uiListItem:updateCursor()
     end
 
     self.cursor:opacity(opacity)
+
+    -- Lift only the actual selected member; subtargets keep their existing cursor.
+    local selected = self.player.isSelected and not self.player.isOutsideZone
+    if self.selectedGlow then
+        self.selectedGlow:visible(selected, const.visFeature)
+    end
+    local lift = selected and self.nameLift or 0
+    self.txtName:pos(self.baseNamePos.x - lift, self.baseNamePos.y - lift)
 end
 
 -- handle mouse interaction
