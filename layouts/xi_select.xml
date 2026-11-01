@@ -217,13 +217,13 @@
                 <hover>
                     <enabled>false</enabled>
                 </hover>
-                <!-- Selection is independent of mouse hover; buffs remain outside its bounds. -->
+                <!-- Amber bloom is visible when selected; mouse hover remains independent. -->
                 <selectedGlow>
                     <enabled>true</enabled>
-                    <path>assets/xiv/Hover.png</path>
+                    <path>assets/ffxi/SelectedAmberGlow.png</path>
                     <pos>8,-4</pos>
                     <size>278,35</size>
-                    <color>#FFFFFF38</color>
+                    <color>#FFFFFFFF</color>
                     <zOrder>5</zOrder>
                 </selectedGlow>
                 <txtZone>

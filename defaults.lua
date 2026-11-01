@@ -39,31 +39,33 @@ local defaults = {
     mouseTargeting = true, -- enables targeting party members using the mouse
     swapSingleAlliance = false, -- when only one alliance party exists, show the members in the 2nd alliance list
 
-    rangeNumeric = false, -- enables numeric display of party member distances
+    rangeNumeric = true, -- enables numeric display of party member distances
     rangeIndicator = 0, -- if party members are closer than this distance, they will be marked. 0 = off
     rangeIndicatorFar = 0, -- a second distance for range indication, further away, displaying a hollow icon. 0 = off
 
     updateIntervalMsec = 30, -- the UI update interval in milliseconds, changing this will affect animation speeds and general performance
 
+    -- Starting geometry copied from Cioara's 2026-10-31 xi_select configuration.
+    -- Character-specific saved XML still overrides these values without being overwritten.
     party = {
-        pos = L{ 0.015625, 0.4791666 }, -- relative coordinates, resolution independent (range 0.0 to 1.0)
-        scale = L{ 0, 0 }, -- scale 0 will trigger screen resolution based autoscaling
+        pos = L{ 0.91354166666667, 0.88981481481481 }, -- relative coordinates, resolution independent (range 0.0 to 1.0)
+        scale = L{ 1.1, 1.1 }, -- Cioara's tuned default (auto-scaling remains selectable in setup)
         itemSpacing = 0, -- distance between party list items
-        alignBottom = false, -- expands the party list from bottom to top
+        alignBottom = true, -- expands the party list from bottom to top
         showEmptyRows = false -- show empty rows in partially full parties
     },
     alliance1 = {
-        pos = L{ 0.8671875, 0.5277777 },
-        scale = L{ 0, 0 },
+        pos = L{ 0.92057291666667, 0.67305555555556 },
+        scale = L{ 1, 1 },
         itemSpacing = 0,
-        alignBottom = false,
+        alignBottom = true,
         showEmptyRows = false
     },
     alliance2 = {
-        pos = L{ 0.8671875, 0.5972222 },
-        scale = L{ 0, 0 },
+        pos = L{ 0.92083333333333, 0.77731481481481 },
+        scale = L{ 1, 1 },
         itemSpacing = 0,
-        alignBottom = false,
+        alignBottom = true,
         showEmptyRows = false
     },
 

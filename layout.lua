@@ -371,6 +371,15 @@ local layout = {
                 color = '#FFFFFFAA',
                 zOrder = 0
             }),
+            -- selected target highlight. Disabled for other layouts by default.
+            -- xi_select.xml enables and customizes it independently of mouse hover.
+            selectedGlow = image({
+                pos = L{ 8, -4 },
+                path = 'assets/ffxi/SelectedAmberGlow.png',
+                size = L{ 278, 35 },
+                color = '#FFFFFFFF',
+                zOrder = 5
+            }),
             -- cursor image
             cursor = image({
                 pos = L{ 20, -8 },
