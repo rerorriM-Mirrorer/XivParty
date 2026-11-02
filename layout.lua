@@ -378,7 +378,8 @@ local layout = {
                 path = 'assets/ffxi/SelectedAmberGlow.png',
                 size = L{ 278, 35 },
                 color = '#FFFFFFFF',
-                zOrder = 5
+                zOrder = 5,
+                subtargetOpacity = 0.65 -- multiplier applied only to subtarget glow, 0..1
             }),
             -- cursor image
             cursor = image({

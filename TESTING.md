@@ -1,5 +1,24 @@
 # TESTING.md
 
+## Current Development Status — 2026-11-02 (America/Chicago)
+
+- **Repository / working branch:** `rerorriM-Mirrorer/XivParty` / `dev/xi-select-2026-10-28`. Starting remote head: `509c78263079f942a8d1a26b5287d05d8e881488` (prior default/glow batch).
+- **Current batch:** selected-target amber glow now also appears on in-zone subtargets using configurable `selectedGlow.subtargetOpacity` (default 0.65, clamped 0..1). Main target retains full glow intensity and its exclusive 2px name lift. The existing 50%-opacity subtarget cursor remains unchanged. Source `xi_select` incorporates Cioara's recently confirmed `pos=6,-3`, `color=#FFFFFF99`, and opaque `imgMid=#FFFFFFFF`.
+- **Latest user-confirmed live observations:** selecting a primary target already shows the amber glow and moves its name; subtargets had no glow. Setting only `imgMid` to opaque covered the underlying in-game party list satisfactorily. Cioara preferred `pos=6,-3` and `#FFFFFF99` for the glow. New subtarget behavior has **not** been verified in Windower.
+- **Available verification:** static source checks, XML parsing and simulated target/subtarget visibility/opacity table. No FFXI or Windower runtime available for this batch; Lua 5.1 interpreter unavailable in build environment.
+- **Outstanding / next live test:** check normal target, subtarget via `<st>`/`stpt`/`stal`, target+subtarget priority, clearing subtarget, out-of-zone party members, and hover independence. Verify 0, 0.65, and 1.0 `subtargetOpacity` at Cioara's scale and with multiple clients. Do not overwrite existing user-customized `xi_select.xml` without a backup.
+
+---
+
+## Current test instructions — subtarget amber (2026-11-02)
+
+1. Back up existing `addons/xivparty/` and any customized `layouts/xi_select.xml`, especially local glow/background tuning, before installing the full package. Extract the GitHub archive as the addon folder; keep `README.md`, `WORKFLOW.md`, and `TESTING.md` inside `xivparty/`.
+2. Reload using `lua r xivparty` and ensure `//xp layout xi_select` is active. Confirm the preferred glow `pos=6,-3`, `size=278,35`, `color=#FFFFFF99`, `subtargetOpacity=0.65` and `imgMid=#FFFFFFFF`.
+3. Select a party member normally: full selected-glow opacity (multiplying the XML `color` alpha), two-pixel name lift, full-strength cursor.
+4. While selecting a magic or item target or using party/alliance subtarget commands, move the subtarget among party members: same amber glow at 65% of the selected-row opacity, cursor remains 50%, name stays at original location.
+5. Clear the subtarget or select an out-of-zone member: no subtarget glow; ensure prior states do not persist. If primary target and subtarget refer to the same member, primary target styling wins.
+6. Tune `subtargetOpacity` to `0`, `0.65`, or `1` and reload to compare. Test hover independence and multiple character/client scales. Record observations/screenshots. Existing layout overrides and character settings remain untouched unless intentionally updated.
+
 ## Current Development Status — 2026-10-31 (America/Chicago)
 
 - **Repository / branch:** `rerorriM-Mirrorer/XivParty` / `dev/xi-select-2026-10-28`; source checkpoint `d13f07720a3e2bc81e3a0739129f7b02544ad961` (code and default migration).
@@ -43,6 +62,9 @@
 
 ## Historical observations and delivery register
 
+- **2026-11-02 — subtarget amber / saved layout tune-in:** User confirmed opaque `imgMid` alone hides the native party list and primary target amber/glow is visible; subtargets do not highlight. Requested weaker amber subtarget glow; implemented independent 0.65 multiplier with normal target precedence, retained target-only name lift and subtarget cursor. Merged the previously chosen `pos=6,-3`, `color=#FFFFFF99`, and opaque `imgMid` into `xi_select.xml`. Static/simulated verification only; live acceptance pending.
+
+
 - **2026-10-31 — Cioara-as-default + amber glow:** User supplied `settings(20261101-030752).xml`: global settings unchanged apart from Cioara's explicit layout, range and party/alliance overrides; user reports existing 2px selection name lift works and the original low-opacity hover-based amber is not visible. Defaults migrated to Lua (new installs), leaving existing saved XML untouched. Replaced highlight with a purpose-built amber RGBA texture and added explicit layout schema. Original 2026-10-28 test history retained. Static assertions and PNG/XML checks only; live acceptance pending.
 
 
@@ -50,6 +72,9 @@
 - **2026-10-28 — xi-select:** Based on Cioara's uploaded `xi(1).xml`; source baseline `e1aa6e5702cf508690f08d36970994427f3e4062`; static validation only. The exact published branch head is reported at delivery, not embedded here.
 
 ## User-provided materials, observations and requests
+
+- **2026-11-02 live feedback:** changing only `imgMid` opacity made XI-themed background cover FFXI's native party list; selected amber glow works, but none appeared when subtargeting. Confirmed preference for `pos=6,-3`, `#FFFFFF99` with original `278,35` geometry. Approved independent, dimmer subtarget glow at `0.65`.
+
 
 - `settings(20261101-030752).xml` (uploaded 2026-10-31): Cioara party `0.91354166666667,0.88981481481481`, scale `1.1,1.1`, alignBottom true; alliance 1 `0.92057291666667,0.67305555555556` and alliance 2 `0.92083333333333,0.77731481481481`, scale `1,1`, alignBottom true; `xi_select`; numeric range true. Other characters' overrides intentionally excluded from defaults.
 - User confirms selected-name lift is visible but amber glow is not; new amber texture awaits live confirmation.

@@ -62,6 +62,11 @@ function uiListItem:init(layout, player, isUiLocked, itemWidth, itemHeight)
         if selectedLayout and selectedLayout.enabled then
             self.selectedGlow = self:addChild(uiImage.new(selectedLayout))
             self.selectedGlow:hide(const.visFeature)
+
+            -- Subtargets share the same texture, with independently tunable opacity.
+            -- Both camelCase and lowercase forms accommodate Windower's XML parser.
+            local subtargetOpacity = tonumber(selectedLayout.subtargetOpacity or selectedLayout.subtargetopacity) or 0.65
+            self.subtargetGlowOpacity = math.max(0, math.min(1, subtargetOpacity))
         end
         self.baseNamePos = utils:coord(layout.txtName.pos)
         self.nameLift = tonumber(layout.txtName.selectionLift or layout.txtName.selectionlift) or 0
@@ -200,10 +205,13 @@ function uiListItem:updateCursor()
 
     self.cursor:opacity(opacity)
 
-    -- Lift only the actual selected member; subtargets keep their existing cursor.
+    -- The target and subtarget both get a highlight, with target priority.
+    -- Keep the two-pixel name lift exclusive to the selected main target.
     local selected = self.player.isSelected and not self.player.isOutsideZone
+    local subtarget = self.player.isSubTarget and not self.player.isOutsideZone
     if self.selectedGlow then
-        self.selectedGlow:visible(selected, const.visFeature)
+        self.selectedGlow:visible(selected or subtarget, const.visFeature)
+        self.selectedGlow:opacity(selected and 1 or (subtarget and self.subtargetGlowOpacity or 0))
     end
     local lift = selected and self.nameLift or 0
     self.txtName:pos(self.baseNamePos.x - lift, self.baseNamePos.y - lift)

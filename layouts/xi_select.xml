@@ -18,7 +18,7 @@
                 </imgTop>
                 <imgMid>
                     <enabled>true</enabled>
-                    <color>#FFFFFFBA</color>
+                    <color>#FFFFFFFF</color>
                     <path>assets/ffxi/AllyBgMid.png</path>
                     <pos>0,6</pos>
                     <size>286,4</size>
@@ -217,13 +217,14 @@
                 <hover>
                     <enabled>false</enabled>
                 </hover>
-                <!-- Amber bloom is visible when selected; mouse hover remains independent. -->
+                <!-- Main targets receive full amber glow; subtargets are softly highlighted. -->
                 <selectedGlow>
                     <enabled>true</enabled>
                     <path>assets/ffxi/SelectedAmberGlow.png</path>
-                    <pos>8,-4</pos>
+                    <pos>6,-3</pos>
                     <size>278,35</size>
-                    <color>#FFFFFFFF</color>
+                    <color>#FFFFFF99</color>
+                    <subtargetOpacity>0.65</subtargetOpacity>
                     <zOrder>5</zOrder>
                 </selectedGlow>
                 <txtZone>
