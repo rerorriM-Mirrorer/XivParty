@@ -1,0 +1,39 @@
+XIVParty leader circle live-update fix — minimal patch
+====================================================
+
+Source repository: rerorriM-Mirrorer/XivParty
+Source working branch: dev/xi-select-2026-10-28
+Source code commit: 53ffe3ebecb5b5d59b98f4cd27aa23b4c2601dc1
+
+INSTALL
+1. Back up Windower/addons/xivparty/model.lua.
+2. Extract the downloaded ZIP, enter its xivparty/ folder, and copy ONLY
+   model.lua into Windower/addons/xivparty/ (replacing that one file).
+3. Do not copy any layouts, images or assets. This patch includes none.
+4. Reload in game: lua r xivparty
+
+WHAT CHANGED
+- Checks party1_leader, party2_leader, party3_leader, and alliance_leader
+  from Windower's live party state on each model update.
+- No longer requires seeing a specific 0xC8 packet AFTER addon load just
+  to mark a leader; retains 0xC8 processing for packet-only metadata.
+- In a self-led party with only identifiable Trust NPCs, can mark the player
+  as leader if Windower exposes no party1_leader.
+- Does not modify the setup-mode fake leader assignment.
+
+YOUR CUSTOM UI
+Your xi_select.xml, Hover.png, Hover2.png, custom leader-circle image,
+and all other artwork are untouched. This ZIP contains none of them.
+The uploaded xi_select.xml currently points the leader imgParty image at
+assets/ffxi/Range.png; please verify this is your intended circle texture
+if the image itself looks wrong after the code fix.
+
+FILES INCLUDED
+xivparty/model.lua        - the only runtime file to install
+xivparty/WORKFLOW.md      - shared practices
+xivparty/TESTING.md       - cumulative history and test instructions
+xivparty/PATCH-NOTES.txt  - these notes
+
+No in-game run has been performed here. Static code validation and simulated
+leader-state checks were performed on the source; check in FFXI after reload,
+zoning, changing leader, with 4 PCs and with Trusts.
