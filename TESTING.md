@@ -1,5 +1,25 @@
 # TESTING.md
 
+## Current Development Status — 2026-11-02 (leader marker follow-up)
+
+- **Repository / branch:** `rerorriM-Mirrorer/XivParty` / `dev/xi-select-2026-10-28`; starting source checkpoint `9ec103588c9877fdbe365078fac46c5faf7e89c5`.
+- **Current batch:** keep the leader dot visible in real parties by reconciling party and alliance leader IDs from live `windower.ffxi.get_party()` on each model refresh, rather than depending exclusively on the `0xC8` incoming packet. Retain `0xC8` for quartermaster and fallback cached IDs; clear obsolete leader flags when the live party reports no leader. For a self-led group consisting only of known in-zone Trust NPC members, allow local-player fallback if `party1_leader` is missing. Do not infer leadership if any human or unknown member is present.
+- **Most recent user-confirmed live state:** `//xp setup` shows the leader dot, but a real four-member party does not. The user chose the XIV-themed hover image copied to `assets/ffxi/Hover.png`, with local `Hover2.png` retained. Their uploaded `xi_select.xml` points leader indicators at `assets/ffxi/Range.png` and has custom leader positions, sizes, and colors; these remain **untouched**.
+- **Checks:** source-structure and JS simulated leader-state tests only. No live FFXI/Windower session. No Lua 5.1 runtime test.
+- **Live tests needed:** check leader circle with two-to-six people, a party of character plus Trust NPCs, immediately after `lua r xivparty`, after zoning and leadership transfer, and in alliance groups; verify which texture `Range.png` currently displays, and do not overwrite custom assets/layout XML.
+- **Next:** distribute a minimal model-only patch (plus WORKFLOW/TESTING for record) without icons or layout replacements, then inspect in-game observations.
+
+---
+
+## Test instructions — leader indicator (2026-11-02)
+
+1. Back up `addons/xivparty/model.lua`. For the minimal patch, replace **only** `model.lua`, keeping `assets/`, `layouts/xi_select.xml`, `data/settings.xml`, all custom textures and icons unchanged.
+2. Reload with `lua r xivparty` while already grouped. Confirm the party leader has the configured marker immediately, instead of requiring another `0xC8` packet.
+3. Test a group of four with human characters, a local player + three Trusts, then a two-member or full six-member party; confirm only the real leader gets the party circle.
+4. Change leader and zone/reload; leader circle must move/return correctly and disappear from the old leader. In an alliance, inspect party leaders and alliance leader independently; quartermaster remains governed by packet flags.
+5. Compare with `//xp setup` (fake data assigns flags directly). If the circle itself looks wrong, check user-customized `xi_select.xml` where `imgParty` currently references `assets/ffxi/Range.png`, not a dedicated Leader Circle path. Verify existing file appearance locally before changing references.
+6. Record actual in-game outcome and any discrepancies; simulated states cannot prove Windower reports leader IDs as expected in every party state.
+
 ## Current Development Status — 2026-11-02 (America/Chicago)
 
 - **Repository / working branch:** `rerorriM-Mirrorer/XivParty` / `dev/xi-select-2026-10-28`. Starting remote head: `509c78263079f942a8d1a26b5287d05d8e881488` (prior default/glow batch).
@@ -62,6 +82,10 @@
 
 ## Historical observations and delivery register
 
+- **2026-11-02 — leader-circle visibility:** User reports the custom leader circle in `//xp setup` but not in a four-member live party. Investigation found UI only displays `isLeader`, packet `0xC8` is the sole prior source for this flag in normal gameplay, and setup explicitly sets it true. Added per-frame reconciliation from Windower party leader IDs and conservative self-led Trust-only fallback. Local `xi_select.xml` leader paths are `assets/ffxi/Range.png` (custom asset path not modified). Static/simulated tests only, in-game verification pending.
+
+
+
 - **2026-11-02 — subtarget amber / saved layout tune-in:** User confirmed opaque `imgMid` alone hides the native party list and primary target amber/glow is visible; subtargets do not highlight. Requested weaker amber subtarget glow; implemented independent 0.65 multiplier with normal target precedence, retained target-only name lift and subtarget cursor. Merged the previously chosen `pos=6,-3`, `color=#FFFFFF99`, and opaque `imgMid` into `xi_select.xml`. Static/simulated verification only; live acceptance pending.
 
 
@@ -72,6 +96,9 @@
 - **2026-10-28 — xi-select:** Based on Cioara's uploaded `xi(1).xml`; source baseline `e1aa6e5702cf508690f08d36970994427f3e4062`; static validation only. The exact published branch head is reported at delivery, not embedded here.
 
 ## User-provided materials, observations and requests
+
+- **2026-11-02 leader layout:** User's uploaded `xi_select.xml` (local, not committed) uses `assets/ffxi/Hover.png` for `selectedGlow` at `pos=3,-3`, `size=278,35`, alpha `#FFFFFF99`, and opaque `imgMid`. Leader `imgParty`, `imgAlliance`, `imgQuarterMaster` reference `assets/ffxi/Range.png` with `pos=9,18`, `zOrder=9` and image size `7,5`. User confirms setup circle displays but live party of four does not. Preserve all user-modified textures and XML.
+
 
 - **2026-11-02 live feedback:** changing only `imgMid` opacity made XI-themed background cover FFXI's native party list; selected amber glow works, but none appeared when subtargeting. Confirmed preference for `pos=6,-3`, `#FFFFFF99` with original `278,35` geometry. Approved independent, dimmer subtarget glow at `0.65`.
 

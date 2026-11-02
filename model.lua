@@ -68,6 +68,37 @@ function model:updatePlayers()
     local target = windower.ffxi.get_mob_by_target('t')
     local subtarget = windower.ffxi.get_mob_by_target('st') or windower.ffxi.get_mob_by_target('stpt') or windower.ffxi.get_mob_by_target('stal')
 
+    -- 0xC8 also reports leaders, but that packet may have arrived before the
+    -- addon loaded. The live party structure exposes leader IDs every update.
+    local leaderIds = { members.party1_leader, members.party2_leader, members.party3_leader }
+    local allianceLeaderId = members.alliance_leader
+
+    -- Some solo-with-Trusts groups have no party1_leader field. In that
+    -- specific case the only human player is the leader. Do not guess when
+    -- any other human member is present or a Trust has not loaded in-zone.
+    if not leaderIds[1] and members.p0 and members.p0.name then
+        local hasTrust = false
+        local onlyTrusts = true
+        for i = 1, 5 do
+            local other = members['p' .. tostring(i)]
+            if other and other.name then
+                if other.mob and other.mob.is_npc then
+                    hasTrust = true
+                else
+                    onlyTrusts = false
+                    break
+                end
+            end
+        end
+
+        if hasTrust and onlyTrusts then
+            local selfPlayer = windower.ffxi.get_player()
+            if selfPlayer and selfPlayer.name == members.p0.name then
+                leaderIds[1] = selfPlayer.id
+            end
+        end
+    end
+
     for i = 0, 17 do
         local idx = (i / 6):floor()
         local member = members[string.format(partyKeys[idx + 1], i % 6)]
@@ -81,6 +112,20 @@ function model:updatePlayers()
             local foundPlayer = self:getPlayer(member.name, id, 'member')
             if foundPlayer then
                 foundPlayer:update(member, target, subtarget)
+
+                -- Prefer authoritative live leader IDs over flags cached from
+                -- 0xC8, including when the leader changes without a reload.
+                -- Keep cached packet flags if this member's ID is unavailable.
+                local partyLeaderId = leaderIds[idx + 1]
+                if foundPlayer.id then
+                    foundPlayer.isLeader = partyLeaderId ~= nil and foundPlayer.id == partyLeaderId
+                    foundPlayer.isAllianceLeader = allianceLeaderId ~= nil and foundPlayer.id == allianceLeaderId
+                elseif not partyLeaderId then
+                    foundPlayer.isLeader = false
+                end
+                if not allianceLeaderId then
+                    foundPlayer.isAllianceLeader = false
+                end
             end
 
             self.parties[idx][i % 6] = foundPlayer

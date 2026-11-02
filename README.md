@@ -137,6 +137,10 @@ Parameters:
 * KenshiDRK (partybuffs) - buff packet code and buff icons
 * Windower - buff listing for custom ordering feature
 
+## Current development status — leader dot refresh (2026-11-02)
+
+The live party and alliance leader markers now derive from Windower's current party leader IDs on every model update, so loading/reloading after a leadership packet no longer hides the marker. A conservative self-led Trust-only fallback is included. The XML and assets remain unchanged; for custom layouts, `imgParty` texture references still come from the user's local layout. See `TESTING.md` for in-game checks.
+
 ## Current development status — subtarget amber (2026-11-02)
 
 The `xi_select` layout now highlights in-zone subtargets at 65% of the primary target glow, adjustable via `<subtargetOpacity>0.65</subtargetOpacity>` inside `<selectedGlow>` (0..1). Primary target still lifts the name and receives full glow; subtargets retain their half-opacity cursor and unlifted name. The layout includes Cioara's tuned amber position `6,-3`, tint alpha `#FFFFFF99`, and opaque center background `imgMid`. Existing user XML overrides are preserved; see `TESTING.md` for live checks.
@@ -156,3 +160,5 @@ The opt-in `xi_select` layout adds a subtle selection glow (the existing `assets
 - 2026-10-31 (development): Adopted Cioara's tuned `xi_select` configuration as fresh-install hardcoded defaults (including party/alliance placement, bottom alignment and numeric range); new selection glow texture and explicit layout schema, preserving user XML and selected-name lift. Awaiting live FFXI testing.
 
 - 2026-11-02 (development): Added an independently tunable amber subtarget glow (`subtargetOpacity=0.65`, main-target priority); kept name lift target-only, retained subtarget cursor opacity. Carried user's `pos=6,-3`, `#FFFFFF99`, and opaque `imgMid` into the XI select layout. Static tests only, pending in-game verification.
+
+- 2026-11-02 (development): Reconciled leader/alliance-leader markers from live party leader IDs, reducing reliance on startup-time `0xC8` packets, with a guarded Trust-only fallback. No changes to user icon assets or XML; live test pending.
