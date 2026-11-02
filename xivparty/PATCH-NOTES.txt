@@ -1,0 +1,35 @@
+XIVParty minimal subtarget amber patch — 2026-11-02
+=================================================
+Source: rerorriM-Mirrorer/XivParty
+Source branch: dev/xi-select-2026-10-28
+Exact source commit: 9ec103588c9877fdbe365078fac46c5faf7e89c5
+
+INSTALLATION
+1. Back up your existing Windower/addons/xivparty/uiListItem.lua and layout.lua.
+2. Copy ONLY uiListItem.lua and layout.lua from this package's xivparty/ directory
+   to Windower/addons/xivparty/ (replace just these two files).
+3. Leave your existing layouts/xi_select.xml, data/settings.xml, assets/,
+   textures, icons, and all other addon files completely untouched.
+4. Reload with 'lua r xivparty' and test main targets and subtargets.
+
+The new subtarget glow works without editing your layout XML because layout.lua
+sets subtargetOpacity to 0.65 by default. The existing selectedGlow XML must
+already be enabled and point at a usable image (as in your working XI layout).
+
+OPTIONAL TUNING
+If you wish to adjust subtarget intensity, add this tag inside the existing
+<selectedGlow> section of your layouts/xi_select.xml:
+    <subtargetOpacity>0.65</subtargetOpacity>
+0 means no subtarget glow; 1 matches the main-target glow.
+No XML change is necessary for the default behavior.
+
+WHAT'S IN THIS PACKAGE
+* xivparty/uiListItem.lua  [game runtime patch]
+* xivparty/layout.lua      [game runtime schema/default]
+* xivparty/WORKFLOW.md     [project development practices]
+* xivparty/TESTING.md      [cumulative test instructions/history]
+* xivparty/PATCH-NOTES.txt [this file]
+
+NO images/icons/assets, XML layouts, saved settings, or other runtime files.
+This is an incremental patch, not a complete fresh installation.
+Static/simulated checks passed for the source commit; live FFXI testing pending.
